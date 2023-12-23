@@ -1,0 +1,51 @@
+---
+- hosts: all
+  become: yes
+
+  vars:
+    - venv: /usr/bin/.emacs.venv
+      
+  tasks:
+  # Windows manager
+  - name: Ensure I3 is installed.
+    package:
+      name:
+        - i3
+        - xinit
+      state: present
+
+  # Display manager
+  - name: Ensure ly dependencies are installed.
+    package:
+      name:
+        - build-essential
+        - libpam0g-dev
+        - libxcb-xkb-dev
+        - git
+      state: present
+      
+  - name: Ensure ly source code is downloaded.
+    ansible.builtin.git:
+      repo: 'https://github.com/fairyglade/ly'
+      dest: /opt/ly
+      version: 4ee2b3ecc73882cfecdbe2162d4fece406a110e7
+
+  - name: Ensure ly is compiled.
+    community.general.make:
+      chdir: /opt/ly
+
+  - name: Ensure ly is installed.
+    community.general.make:
+      chdir: /opt/ly
+      targets:
+        - install
+        - installsystemd
+      
+  - name: Ensure ly is running.
+    service:
+      name: ly
+      state: started
+      enabled: yes
+
+  - name: Unconditionally reboot the machine
+    reboot:      
