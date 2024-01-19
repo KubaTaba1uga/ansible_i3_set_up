@@ -15,12 +15,16 @@
       state: present
 
   # Display manager
-  - name: Ensure ly dependencies are installed.
+  - name: Ensure emptty dependencies are installed.
     package:
       name:
-        - build-essential
+        - golang
         - libpam0g-dev
-        - libxcb-xkb-dev
+        - xorg
+        - libxgks-dev
+        - xauth
+        - gcc
+        - util-linux
         - git
       state: present
       
