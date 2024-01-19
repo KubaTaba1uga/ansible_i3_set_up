@@ -28,26 +28,29 @@
         - git
       state: present
       
-  - name: Ensure ly source code is downloaded.
+  - name: Ensure emptty source code is downloaded.
     ansible.builtin.git:
-      repo: 'https://github.com/fairyglade/ly'
-      dest: /opt/ly
-      version: 4ee2b3ecc73882cfecdbe2162d4fece406a110e7
+      repo: 'https://github.com/tvrzna/emptty'
+      dest: /tmp/emptty
+      version: d70822e745ef98c27d1b7c19d23de5d8b6e45877
 
-  - name: Ensure ly is compiled.
+  - name: Ensure emptty is compiled.
     community.general.make:
-      chdir: /opt/ly
+      chdir: /tmp/emptty
 
   - name: Ensure ly is installed.
     community.general.make:
-      chdir: /opt/ly
+      chdir: /tmp/emptty
       targets:
         - install
-        - installsystemd
+        - install-pam-debian
+        - install-manual
+        - install-config
+        - install-systemd
       
-  - name: Ensure ly is running.
+  - name: Ensure emptty is running.
     service:
-      name: ly
+      name: emptty
       state: started
       enabled: yes
 
