@@ -6,6 +6,9 @@
     - venv: /usr/bin/.emacs.venv
       
   tasks:
+  - apt:
+      update_cache: yes
+
   # Windows manager
   - name: Ensure I3 is installed.
     package:
@@ -21,7 +24,8 @@
         - golang
         - libpam0g-dev
         - xorg
-        - libxgks-dev
+        - libx11-6
+        - libx11-dev
         - xauth
         - gcc
         - util-linux
@@ -37,8 +41,10 @@
   - name: Ensure emptty is compiled.
     community.general.make:
       chdir: /tmp/emptty
+      targets:
+        - build
 
-  - name: Ensure ly is installed.
+  - name: Ensure emptty is installed.
     community.general.make:
       chdir: /tmp/emptty
       targets:
